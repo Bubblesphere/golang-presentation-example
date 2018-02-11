@@ -5,8 +5,8 @@ const endpoints = {
 }
 
 const createAPI = (content) => {
-  //addTodoToDom('0e879e24-9894-4dfa-73a7-031cd1dc2a21', content);
-  fetch(endpoints.create,  {
+  addTodoToDom('0e879e24-9894-4dfa-73a7-031cd1dc2a21', content);
+  /*fetch(endpoints.create,  {
     method: 'post',
     headers: { 'Content-Type': 'text/plain' },
     body: content
@@ -15,17 +15,17 @@ const createAPI = (content) => {
   .then(json => addTodoToDom({
     uuid: json,
     content: content
-  }));
+  }));*/
 }
 
 const listAPI = () => {
-  //addListToDom(JSON.parse('{"0e879e24-9894-4dfa-73a7-031cd1dc2a21":"1","32c98be7-25fe-42d7-7c93-f97e09db7a1d":"2","4fd7b310-4573-47d0-6b21-49ef614d1970":"3"}'));
-  fetch(endpoints.list,  {
+  addListToDom(JSON.parse('{"0e879e24-9894-4dfa-73a7-031cd1dc2a21":"1","32c98be7-25fe-42d7-7c93-f97e09db7a1d":"2","4fd7b310-4573-47d0-6b21-49ef614d1970":"3"}'));
+  /*fetch(endpoints.list,  {
       method: 'post',
       headers: { 'Content-Type': 'text/plain' }
     })
     .then(response => response.json())
-    .then(json => addListToDom(JSON.parse(json)));
+    .then(json => addListToDom(JSON.parse(json)));*/
 }
 
 const deleteAPI = (id) => {
@@ -41,20 +41,28 @@ const addListToDom = (json) => {
 }
 
 const addTodoToDom = (uuid, content) => {
-  let div = document.createElement("div");
+  const li = createLi(uuid, content);
+  const del = createDelete();
+  del.addEventListener('click', (e) => {
+    li.remove();
+    deleteAPI(uuid);
+  });
+  li.appendChild(del);
+  document.querySelectorAll('#todos')[0].appendChild(li);
+}
+
+const createLi = (uuid, content) => {
   let li = document.createElement("li");
   li.textContent = content;
   li.setAttribute("id", uuid);
+  return li;
+}
+
+const createDelete = () => {
   let del = document.createElement("input");
-  del.value = 'Delete';
-  del.type = 'button'
-  del.addEventListener('click', (e) => {
-    div.remove();
-    deleteAPI(uuid);
-  });
-  div.appendChild(li);
-  div.appendChild(del);
-  document.querySelectorAll('#todos')[0].appendChild(div);
+  del.value = 'x';
+  del.type = 'button';
+  return del;
 }
 
 const add = document.querySelectorAll('#add')[0];
