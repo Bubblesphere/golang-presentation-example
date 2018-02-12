@@ -4,56 +4,69 @@ const endpoints = {
   delete: 'http://localhost:8000/task/delete'
 }
 
-const createAPI = (content) => {  
-  fetch(endpoints.create,  {
+const createAPI = (content) => {
+  fetch(endpoints.create, {
     method: 'post',
     headers: { 'Content-Type': 'text/plain' },
     body: content
   })
-  .then(response => response.text())
-  .then(json => addTodoToDom(json, content));
+    .then(response => response.text())
+    .then(json => addTodoToDom(json, content));
 }
 
-const listAPI = () => {  
-  fetch(endpoints.list,  {
-      method: 'post',
-      headers: { 'Content-Type': 'text/plain' }
-    })
+const listAPI = () => {
+  fetch(endpoints.list, {
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' }
+  })
     .then(response => response.text())
     .then(json => addListToDom(JSON.parse(json)));
 }
 
 const deleteAPI = (id) => {
-  fetch(endpoints.delete,  {
+  fetch(endpoints.delete, {
     method: 'post',
     headers: { 'Content-Type': 'text/plain' },
     body: id
   });
 }
 
-const addListToDom = (json) => {  
+const addListToDom = (json) => {
   console.log("test")
-  Object.keys(json).forEach(function(key) {
+  Object.keys(json).forEach(function (key) {
     addTodoToDom(key, json[key]);
   });
 }
 
 const addTodoToDom = (uuid, content) => {
-  const li = createLi(uuid, content);
-  const del = createDelete();
-  del.addEventListener('click', (e) => {
-    li.remove();
-    deleteAPI(uuid);
-  });
-  li.appendChild(del);
+  const li = createRow(uuid, content);
   document.querySelectorAll('#todos')[0].appendChild(li);
 }
 
-const createLi = (uuid, content) => {
-  let li = document.createElement("li");
-  li.textContent = content;
-  li.setAttribute("id", uuid);
-  return li;
+const createRow = (uuid, content) => {
+  let row = document.createElement("div");
+  let txt = document.createElement("div");
+  let btn = document.createElement("div");
+
+  const del = createDelete();
+  del.className = "waves-effect waves-light btn red";
+  del.addEventListener('click', (e) => {
+    row.remove();
+    deleteAPI(uuid);
+  });
+
+  row.className = "row";
+  txt.className = "col s11";
+  txt.textContent = content;
+
+  btn.className = "col s1"; 
+  btn.appendChild(del);
+  btn.setAttribute("id", uuid);
+  
+  row.appendChild(txt);
+  row.appendChild(btn);
+
+  return row;
 }
 
 const createDelete = () => {
@@ -70,6 +83,6 @@ add.addEventListener("click", (e) => {
     createAPI(content.value);
     content.value = '';
   }
-},false);
+}, false);
 
 listAPI();
