@@ -32,7 +32,6 @@ const deleteAPI = (id) => {
 }
 
 const addListToDom = (json) => {
-  console.log("test")
   Object.keys(json).forEach(function (key) {
     addTodoToDom(key, json[key]);
   });

@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/nu7hatch/gouuid"
@@ -39,7 +39,7 @@ func getBodyString(r *http.Request) string {
 	return string(bodyBytes)
 }
 
-func allowCORS(w http.ResponseWriter){
+func allowCORS(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 }
 
@@ -67,7 +67,7 @@ func taskCreate(w http.ResponseWriter, r *http.Request) {
 	tasks[u.String()] = getBodyString(r)
 
 	log.Printf("Create %s - %s\n", u.String(), tasks[u.String()])
-	fmt.Fprintln(w, u.String())
+	fmt.Fprintf(w, u.String())
 }
 
 func taskDelete(w http.ResponseWriter, r *http.Request) {
@@ -114,17 +114,17 @@ func taskRetrieveAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	 //create your file with desired read/write permissions
-	 f, err := os.OpenFile("log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	 if err != nil {
-			 log.Fatal(err)
-	 }   
+	//create your file with desired read/write permissions
+	f, err := os.OpenFile("log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	 //defer to close when you're done with it, not because you think it's idiomatic!
-	 defer f.Close()
+	//defer to close when you're done with it, not because you think it's idiomatic!
+	defer f.Close()
 
-	 //set output of logs to f
-	 log.SetOutput(f)
+	//set output of logs to f
+	log.SetOutput(f)
 
 	tasks = make(map[string]string)
 	handle()
