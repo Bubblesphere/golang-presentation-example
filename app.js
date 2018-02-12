@@ -4,37 +4,35 @@ const endpoints = {
   delete: 'http://localhost:8000/task/delete'
 }
 
-const createAPI = (content) => {
-  addTodoToDom('0e879e24-9894-4dfa-73a7-031cd1dc2a21', content);
-  /*fetch(endpoints.create,  {
+const createAPI = (content) => {  
+  fetch(endpoints.create,  {
     method: 'post',
     headers: { 'Content-Type': 'text/plain' },
     body: content
   })
-  .then(response => response.json())
-  .then(json => addTodoToDom({
-    uuid: json,
-    content: content
-  }));*/
+  .then(response => response.text())
+  .then(json => addTodoToDom(json, content));
 }
 
-const listAPI = () => {
-  addListToDom(JSON.parse('{"0e879e24-9894-4dfa-73a7-031cd1dc2a21":"1","32c98be7-25fe-42d7-7c93-f97e09db7a1d":"2","4fd7b310-4573-47d0-6b21-49ef614d1970":"3"}'));
-  /*fetch(endpoints.list,  {
+const listAPI = () => {  
+  fetch(endpoints.list,  {
       method: 'post',
       headers: { 'Content-Type': 'text/plain' }
     })
-    .then(response => response.json())
-    .then(json => addListToDom(JSON.parse(json)));*/
+    .then(response => response.text())
+    .then(json => addListToDom(JSON.parse(json)));
 }
 
 const deleteAPI = (id) => {
   fetch(endpoints.delete,  {
-    method: 'delete'
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    body: id
   });
 }
 
-const addListToDom = (json) => {
+const addListToDom = (json) => {  
+  console.log("test")
   Object.keys(json).forEach(function(key) {
     addTodoToDom(key, json[key]);
   });
